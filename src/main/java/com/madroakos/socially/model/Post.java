@@ -2,6 +2,8 @@ package com.madroakos.socially.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "app_post")
 public class Post {
@@ -10,13 +12,15 @@ public class Post {
     private Long id;
     private String username;
     private String postContent;
+    private LocalDateTime timeSubmitted;
 
     public Post() {
     }
 
-    public Post(String username, String postContent) {
+    public Post(String username, String postContent, LocalDateTime timeSubmitted) {
         this.username = username;
         this.postContent = postContent;
+        this.timeSubmitted = timeSubmitted;
     }
 
     public Long getId() {
@@ -41,5 +45,13 @@ public class Post {
 
     public void setPostContent(String postContent) {
         this.postContent = postContent;
+    }
+
+    public LocalDateTime getTimeSubmitted() {
+        return timeSubmitted;
+    }
+
+    public void setTimeSubmitted(LocalDateTime timeSubmitted) {
+        this.timeSubmitted = timeSubmitted;
     }
 }

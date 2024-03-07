@@ -86,3 +86,17 @@ header {
     text-align: center;
 }
 
+.upperDiv {
+    display: flex;
+    align-items: center;
+}
+
+.post_userSection {
+    margin-right: 10px;
+}
+
+.post_submitTimeSection {
+    height: 100%;
+    font-size: 12px;
+}
+
