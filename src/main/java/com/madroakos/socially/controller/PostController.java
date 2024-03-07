@@ -17,9 +17,14 @@ public class PostController {
     }
 
     @GetMapping("/postsByUser") //Request without username should be removed later
-    public List<Post> getPostsByUser(@RequestParam(required = false) String username) {
+    public List<Post> getPostsByUser(@RequestParam(required = true) String username) {
             return postRepository.findByUsername(username);
 
+    }
+
+    @GetMapping("/postsByFollowings") //Request without username should be removed later
+    public List<Post> getPostsByUser(@RequestParam(required = true) List<String> username) {
+        return postRepository.findByUsernameIn(username);
     }
 
     @PostMapping("/submitPost")
