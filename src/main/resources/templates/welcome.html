@@ -3,8 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Socially</title>
+    <link rel="stylesheet" href="welcome.css" >
 </head>
 <body>
-    <h1>Welcome to SOCIALLY</h1>
+    <header>
+        <div class="logo">
+            <a href="javascript:void(0);" onclick="window.location.reload();">
+                <img src="/images/logo.png" alt="Logo" id="logo">
+                <p id="logoLabel">ocially</p>
+            </a>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="javascript:void(0);" onclick="window.location.reload();"><img class="icons" src="/images/icons/home.png" alt="Home"></a></li>
+                <li><a href="#"><img class="icons" src="/images/icons/exit.png" alt="Logout"></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="posts-container">
+        <script src="loadPosts.js"></script>
+    </div>
+
+
 </body>
 </html>

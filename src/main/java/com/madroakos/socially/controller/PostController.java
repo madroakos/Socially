@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:63343")
 @RestController
 public class PostController {
     private final PostRepository postRepository;
@@ -14,6 +15,11 @@ public class PostController {
     @Autowired
     public PostController(PostRepository postRepository) {
         this.postRepository = postRepository;
+    }
+
+    @GetMapping("/posts")
+    public List<Post> getPostsByUser() {
+        return postRepository.findAll();
     }
 
     @GetMapping("/postsByUser")
