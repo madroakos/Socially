@@ -80,3 +80,9 @@ header {
     font-weight: bold;
 }
 
+.emptyContainer {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+

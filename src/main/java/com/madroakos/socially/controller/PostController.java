@@ -15,6 +15,14 @@ public class PostController {
     @Autowired
     public PostController(PostRepository postRepository) {
         this.postRepository = postRepository;
+
+        fillWithPostsForTesting();
+    }
+
+    private void fillWithPostsForTesting() {
+        for (int i = 0; i < 15; i++) {
+            postRepository.save(new Post("user" + i, i + ". epic comment here"));
+        }
     }
 
     @GetMapping("/posts")
