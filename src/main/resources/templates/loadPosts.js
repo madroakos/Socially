@@ -15,8 +15,11 @@ fetch('http://localhost:8080/posts')
                 const lowerDiv = document.createElement('div');
                 lowerDiv.classList.add('lowerDiv');
 
-                const userParagraph = document.createElement('p');
+                const userParagraph = document.createElement('a');
                 userParagraph.classList.add('post_userSection');
+                userParagraph.addEventListener('click', function () {
+                    loadPostsFromSelectedUser(post.username);
+                })
                 const submitTime = document.createElement('p');
                 submitTime.classList.add('post_submitTimeSection');
 

@@ -20,6 +20,7 @@ function removeAllChildNodes(parent) {
 
 function loadPostsFromSelectedUser(user) {
     removeAllChildNodes(document.getElementById('posts-container'));
+    document.getElementById('newPostButton').remove();
     loadPostsByUser(user);
 }
 
