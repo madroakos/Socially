@@ -5,11 +5,10 @@ fetch('http://localhost:8080/posts')
 
         if (data.length !== 0) {
             data.forEach(post => {
-                //make post div
+
                 const postDiv = document.createElement('div');
                 postDiv.classList.add('post');
 
-                //inside post div -> make two divs for lines
                 const upperDiv = document.createElement('div');
                 upperDiv.classList.add('upperDiv');
 

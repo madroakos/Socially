@@ -5,15 +5,22 @@ function onFocus () {
     document.getElementById("dropDown").classList.add("show");
 }
 function onFocusOut () {
+    setTimeout(function() {
     document.getElementById("dropDown").classList.remove("show");
     document.getElementById("searchBar").value = null;
     removeAllChildNodes(document.getElementById("dropDown"));
+    }, 100);
 }
 
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
+}
+
+function loadPostsFromSelectedUser(user) {
+    removeAllChildNodes(document.getElementById('posts-container'));
+    loadPostsByUser(user);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -33,6 +40,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         data.forEach(user => {
                             let currentResult = document.createElement('a');
                             currentResult.innerText = user.username;
+                            currentResult.setAttribute('href', `javascript:void(0);`);
+                            currentResult.addEventListener('click', function() {
+                                loadPostsFromSelectedUser(user.username);
+                            });
                             dropDown.appendChild(currentResult);
                         })
                     }

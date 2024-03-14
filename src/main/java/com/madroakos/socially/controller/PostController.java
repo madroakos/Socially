@@ -31,13 +31,13 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Map<String, Object>> getPostsByUser() {
+    public List<Map<String, Object>> getPosts() {
         List<Post> temp = postRepository.findAll();
-        LocalDateTime currenTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
 
         return temp.stream().map(post -> {
             Map<String, Object> postMap = new HashMap<>();
-            Duration timeSince = Duration.between(post.getTimeSubmitted(), currenTime);
+            Duration timeSince = Duration.between(post.getTimeSubmitted(), currentTime);
             String timeSinceInString = simpleTimeFormat(timeSince);
 
             postMap.put("id", post.getId());
@@ -52,20 +52,28 @@ public class PostController {
         if (time.compareTo(Duration.ofMinutes(1)) < 0) {
             return "<1m";
         } else if ((time.compareTo(Duration.ofMinutes(1)) >= 0) && time.compareTo(Duration.ofMinutes(60)) < 0) {
-            return String.valueOf((time.getSeconds() / 60) + "m");
+            return (time.getSeconds() / 60) + "m";
         } else {
-            return String.valueOf((time.getSeconds() / 3600) + "h");
+            return (time.getSeconds() / 3600) + "h";
         }
     }
 
     @GetMapping("/postsByUser")
-    public List<Post> getPostsByUser(@RequestParam(required = true) String username) {
-            return postRepository.findByUsername(username);
-    }
+    public List<Map<String, Object>> getPostsByUser(@RequestParam() String username) {
+        List<Post> temp = postRepository.findByUsername(username);
+        LocalDateTime currentTime = LocalDateTime.now();
 
-    @GetMapping("/postsByFollowings")
-    public List<Post> getPostsByUser(@RequestParam(required = true) List<String> username) {
-        return postRepository.findByUsernameIn(username);
+        return temp.stream().map(post -> {
+            Map<String, Object> postMap = new HashMap<>();
+            Duration timeSince = Duration.between(post.getTimeSubmitted(), currentTime);
+            String timeSinceInString = simpleTimeFormat(timeSince);
+
+            postMap.put("id", post.getId());
+            postMap.put("username", post.getUsername());
+            postMap.put("postContent", post.getPostContent());
+            postMap.put("timeSince", timeSinceInString);
+            return postMap;
+        }).collect(Collectors.toList());
     }
 
     @PostMapping("/submitPost")
