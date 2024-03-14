@@ -105,7 +105,7 @@ header {
     font-size: 12px;
 }
 
-.searchBarLabel {
+.searchBarLabel, .newPostButton {
     position: relative;
 }
 
@@ -115,7 +115,6 @@ header {
     width: 300px;
     background-color: #f6f6f6;
     border: 1px solid #ddd;
-    z-index: 1;
     border-radius: 20px;
     padding: 5px;
 }
@@ -128,7 +127,7 @@ header {
 }
 
 .show {
-    display:block;
+    display: block;
 }
 
 .dropdown-content a:hover {
@@ -166,8 +165,62 @@ header {
     place-content: center;
     vertical-align: center;
     margin: 40px auto auto;
+}
+
+.newPostButton {
+    margin: 20px;
+    text-align: right;
 
 }
 
+#newPostButton {
+    transition: transform 0.5s ease;
+    border-radius: 20px;
+    border-color: darkred;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.newPostButton button:hover {
+    transition: background-color 0.2s;
+    background-color: darkred;
+}
+
+.newPostContent {
+    position: absolute;
+    background-color: #f6f6f6;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 5px;
+    right: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+#submitButton {
+    border-radius: 20px;
+    border-color: darkred;
+    font-weight: bold;
+    margin: 10px;
+}
+
+#newPostComment {
+    height: 140px;
+    width: 290px;
+    border-radius: 20px;
+    border-color: darkred;
+    text-align: left;
+    padding: 10px;
+    outline: none;
+}
+
+.rotateNewPostButton {
+    transform: rotate(45deg);
+}
 
 

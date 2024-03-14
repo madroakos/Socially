@@ -27,11 +27,24 @@
             </ul>
         </nav>
     </header>
+    <div class="newPostButton">
+        <button id="newPostButton" onclick="onNewPostButtonClick()">+</button>
+        <div id="newPost" class="newPostContent hidden">
+            <label>
+                <textarea id="newPostComment" placeholder="Type here..." maxlength="200" onkeyup="countCharacters()"></textarea>
+            </label>
+            <div>
+                <label id="remainingCounter">200</label>
+                <button id="submitButton" onclick="onSubmitButtonClick()">Submit</button>
+            </div>
+        </div>
+    </div>
 
     <div id="posts-container">
         <script src="loadPosts.js"></script>
     </div>
 
+    <script src="newPostButton.js"></script>
 <script src="searchBar.js"></script>
 <script src="loadPostsByUser.js"></script>
 </body>

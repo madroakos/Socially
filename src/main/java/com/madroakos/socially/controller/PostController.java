@@ -3,6 +3,9 @@ package com.madroakos.socially.controller;
 import com.madroakos.socially.model.Post;
 import com.madroakos.socially.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 public class PostController {
     private final PostRepository postRepository;
+    private final Sort sortByTimeDescending = Sort.by(Sort.Direction.DESC, "timeSubmitted");
 
     @Autowired
     public PostController(PostRepository postRepository) {
@@ -35,7 +39,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public List<Map<String, Object>> getPosts() {
-        List<Post> temp = postRepository.findAll();
+        List<Post> temp = postRepository.findAll(sortByTimeDescending);
         LocalDateTime currentTime = LocalDateTime.now();
 
         return temp.stream().map(post -> {
@@ -63,7 +67,7 @@ public class PostController {
 
     @GetMapping("/postsByUser")
     public List<Map<String, Object>> getPostsByUser(@RequestParam() String username) {
-        List<Post> temp = postRepository.findByUsername(username);
+        List<Post> temp = postRepository.findByUsernameOrderByTimeSubmittedDesc(username);
         LocalDateTime currentTime = LocalDateTime.now();
 
         return temp.stream().map(post -> {
@@ -80,8 +84,13 @@ public class PostController {
     }
 
     @PostMapping("/submitPost")
-    public void submitPost(@RequestBody Post post) {
+    public ResponseEntity<String> submitPost(@RequestBody Post post) {
         post.setTimeSubmitted(LocalDateTime.now());
+        if (post.getPostContent() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No content provided");
+        } else {
         postRepository.save(post);
+        return ResponseEntity.status(HttpStatus.OK).body("Post submitted successfully");
+        }
     }
 }
