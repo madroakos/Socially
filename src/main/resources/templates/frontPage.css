@@ -80,6 +80,11 @@ header {
     font-weight: bold;
 }
 
+.post_contentSection {
+    hyphens: auto;
+    overflow-wrap: break-word;
+}
+
 .emptyContainer {
     font-size: 30px;
     font-weight: bold;
