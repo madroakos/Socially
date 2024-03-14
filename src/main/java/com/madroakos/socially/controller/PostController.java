@@ -25,9 +25,12 @@ public class PostController {
     }
 
     private void fillWithPostsForTesting() {
-        for (int i = 0; i < 15; i++) {
-            postRepository.save(new Post("user" + i, i + ". epic comment here", LocalDateTime.now()));
-        }
+            postRepository.save(new Post("user", "comment", LocalDateTime.now()));
+            postRepository.save(new Post("béla", "epic", LocalDateTime.now()));
+            postRepository.save(new Post("marci", "emlékezetes nap", LocalDateTime.now()));
+            postRepository.save(new Post("gábor", "zsákbamacska", LocalDateTime.now()));
+            postRepository.save(new Post("ábel", "bolyongásbolyongásbolyongásbolyongásbolyongásbolyongásbolyoasdasdasdasdasdsdsadasasdasdasdasdsadsaddddddddddddddddddddddddddddd", LocalDateTime.now()));
+            postRepository.save(new Post("fruzsi", "pernahajder", LocalDateTime.now()));
     }
 
     @GetMapping("/posts")
