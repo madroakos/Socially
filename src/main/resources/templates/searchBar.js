@@ -1,15 +1,13 @@
 const searchBar = document.getElementById("searchBar");
+const dropDown = document.getElementById("dropDown");
+const postsContainer = document.getElementById('posts-container');
 
-
-function onFocus () {
-    document.getElementById("dropDown").classList.add("show");
-}
-function onFocusOut () {
-    setTimeout(function() {
-    document.getElementById("dropDown").classList.remove("show");
-    document.getElementById("searchBar").value = null;
-    removeAllChildNodes(document.getElementById("dropDown"));
-    }, 100);
+function toggleDropdown(show) {
+    dropDown.classList[show ? 'add' : 'remove']("show");
+    if (!show) {
+        searchBar.value = null;
+        removeAllChildNodes(dropDown);
+    }
 }
 
 function removeAllChildNodes(parent) {
@@ -19,36 +17,35 @@ function removeAllChildNodes(parent) {
 }
 
 function loadPostsFromSelectedUser(user) {
-    removeAllChildNodes(document.getElementById('posts-container'));
+    removeAllChildNodes(postsContainer);
     document.getElementById('newPostButton').remove();
     loadPostsByUser(user);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    searchBar.addEventListener('input', function() {
-        let dropDown = document.getElementById('dropDown');
+function handleSearch() {
+    removeAllChildNodes(dropDown);
 
+    if (searchBar.value.length === 0) {
         removeAllChildNodes(dropDown);
+    } else {
+        fetch(`http://localhost:8080/searchForUser?username=${searchBar.value}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length !== 0) {
+                    data.forEach(user => {
+                        let currentResult = document.createElement('a');
+                        currentResult.innerText = user.username;
+                        currentResult.setAttribute('href', `javascript:void(0);`);
+                        currentResult.addEventListener('click', () => loadPostsFromSelectedUser(user.username));
+                        dropDown.appendChild(currentResult);
+                    })
+                }
+            })
+    }
+}
 
-        if (searchBar.value.length === 0) {
-            removeAllChildNodes(dropDown);
-        } else {
-            fetch(`http://localhost:8080/searchForUser?username=${searchBar.value}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.length !== 0) {
-                        data.forEach(user => {
-                            let currentResult = document.createElement('a');
-                            currentResult.innerText = user.username;
-                            currentResult.setAttribute('href', `javascript:void(0);`);
-                            currentResult.addEventListener('click', function() {
-                                loadPostsFromSelectedUser(user.username);
-                            });
-                            dropDown.appendChild(currentResult);
-                        })
-                    }
-                })
-        }
-    });
+document.addEventListener("DOMContentLoaded", function() {
+    searchBar.addEventListener('input', handleSearch);
+    searchBar.addEventListener('focus', () => toggleDropdown(true));
+    searchBar.addEventListener('focusout', () => setTimeout(() => toggleDropdown(false), 100));
 });
