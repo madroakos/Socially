@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (searchBar.value.length === 0) {
             removeAllChildNodes(dropDown);
         } else {
-            fetch(`http://localhost:8080/searchForUser?username=${searchBar.innerText}`)
+            fetch(`http://localhost:8080/searchForUser?username=${searchBar.value}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
