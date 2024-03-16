@@ -16,7 +16,7 @@
 
         <div class="searchBarLabel" id="searchBarLabel">
             <label>
-                <input type="text" placeholder="Search" id="searchBar" onfocus="toggleDropdown()" onfocusout="toggleDropdown()" autocomplete="off">
+                <input type="text" placeholder="Search" id="searchBar" autocomplete="off">
             </label>
             <div id="dropDown" class="dropdown-content"></div>
         </div>
@@ -28,14 +28,14 @@
         </nav>
     </header>
     <div class="newPostButton">
-        <button id="newPostButton" onclick="onNewPostButtonClick()">+</button>
+        <button id="newPostButton">+</button>
         <div id="newPost" class="newPostContent hidden">
             <label>
-                <textarea id="newPostComment" placeholder="Type here..." maxlength="200" onkeyup="countCharacters()"></textarea>
+                <textarea id="newPostComment" placeholder="Type here..." maxlength="200"></textarea>
             </label>
             <div>
                 <label id="remainingCounter">200</label>
-                <button id="submitButton" onclick="onSubmitButtonClick()">Submit</button>
+                <button id="submitButton">Submit</button>
             </div>
         </div>
     </div>

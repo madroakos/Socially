@@ -1,42 +1,29 @@
+const newPost = document.getElementById("newPost");
+const newPostButton = document.getElementById("newPostButton");
+const newPostComment = document.getElementById("newPostComment");
+const remainingCounter = document.getElementById('remainingCounter');
+const submitButton = document.getElementById('submitButton');
 
-function onNewPostButtonClick () {
-    document.getElementById("newPost").classList.toggle('hidden');
-    document.getElementById("newPostButton").classList.toggle('rotateNewPostButton');
+function toggleNewPostDropDown() {
+    newPost.classList.toggle('hidden');
+    newPostButton.classList.toggle('rotateNewPostButton');
 }
 
-function onSubmitButtonClick() {
-    onNewPostButtonClick();
-    sendPostRequest();
-    document.getElementById("newPostComment").value = null;
-    document.getElementById('remainingCounter').innerText = String(200);
-}
-
-function countCharacters() {
-    let currentCharacterNumber = document.getElementById('newPostComment').value.length;
-    document.getElementById('remainingCounter').innerText = (200 - currentCharacterNumber).toString();
+function updateRemainingCounter() {
+    remainingCounter.innerText = (200 - newPostComment.value.length).toString();
 }
 
 function sendPostRequest() {
-    const url = 'http://localhost:8080/submitPost';
-
-    const data = {
-        username: 'Péter',
-        postContent: document.getElementById("newPostComment").value
-    };
-
-    fetch(url, {
+    fetch('http://localhost:8080/submitPost', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: 'Péter', postContent: newPostComment.value })
     })
-        .then(response => {
-            if (response.ok) {
-                console.log('Post saved successfully');
-            } else {
-                console.log(response.json());
-            }
-        })
-
+        .then(response => console.log(response.ok ? 'Post saved successfully' : response.json()));
+    toggleNewPostDropDown();
+    location.reload();
 }
+
+newPostButton.addEventListener('click', () => {toggleNewPostDropDown()});
+newPostComment.addEventListener('input', updateRemainingCounter);
+submitButton.addEventListener('click', sendPostRequest);
