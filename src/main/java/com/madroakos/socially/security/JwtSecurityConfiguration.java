@@ -103,7 +103,7 @@ public class JwtSecurityConfiguration {
     }
 
     @Bean
-    public com.nimbusds.jose.jwk.RSAKey rsaKey(KeyPair keyPair) {
+    public RSAKey rsaKey(KeyPair keyPair) {
         return new RSAKey.Builder((RSAPublicKey) keyPair.getPublic())
                 .privateKey(keyPair.getPrivate())
                 .keyUse(KeyUse.SIGNATURE)
