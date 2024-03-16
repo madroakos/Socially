@@ -18,7 +18,10 @@ function removeAllChildNodes(parent) {
 
 function loadPostsFromSelectedUser(user) {
     removeAllChildNodes(postsContainer);
-    document.getElementById('newPostButton').remove();
+    const newPostButton = document.getElementById('newPostButton');
+    if (newPostButton) {
+        newPostButton.remove();
+    }
     loadPostsByUser(user);
 }
 
