@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:63343")
 @RestController
 public class UserController {
     private final UserRepository userRepository;
@@ -38,6 +37,6 @@ public class UserController {
 
     @GetMapping("/searchForUser")
     public List<User> searchForUser(@RequestParam String username) {
-        return userRepository.findByUsernameContaining(username);
+        return userRepository.findByUsernameContainingIgnoreCase(username);
     }
 }
