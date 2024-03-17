@@ -35,4 +35,4 @@ build/
 /mvnw.cmd
 /mvnw
 /src/test/java/com/madroakos/socially/SociallyApplicationTests.java
-application.properties
+src/main/resources/application.properties
