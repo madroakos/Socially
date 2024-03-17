@@ -2,29 +2,19 @@ package com.madroakos.socially.controller;
 
 import com.madroakos.socially.model.User;
 import com.madroakos.socially.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        fillWithPostsForTesting();
-    }
+    private final UserRepository userRepository;
 
-    private void fillWithPostsForTesting() {
-        userRepository.save(new User("béla","example@gmail.com"));
-        userRepository.save(new User("user","example@gmail.com"));
-        userRepository.save(new User("gábor","example@gmail.com"));
-        userRepository.save(new User("fruzsi","example@gmail.com"));
-        userRepository.save(new User("ábel","example@gmail.com"));
-        userRepository.save(new User("marci","example@gmail.com"));
-    }
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
