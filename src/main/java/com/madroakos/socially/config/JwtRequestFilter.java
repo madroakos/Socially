@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
             } catch (SignatureException e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT signature does not match locally computed signature.");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "JWT signature does not match locally computed signature.");
                 return;
             }
         } else {
