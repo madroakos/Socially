@@ -1,5 +1,6 @@
 package com.madroakos.socially.config;
 
+import com.madroakos.socially.repository.TokenBlacklistRepository;
 import com.madroakos.socially.service.CustomUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.IOException;
@@ -26,6 +27,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private TokenBlacklistRepository tokenBlacklistRepository;
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws ServletException, IOException, java.io.IOException {
@@ -35,21 +40,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
-            try {
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
-            } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
-            } catch (SignatureException e) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "JWT signature does not match locally computed signature.");
+            if (!tokenBlacklistRepository.existsByToken(requestTokenHeader.substring(7))) {
+                jwtToken = requestTokenHeader.substring(7);
+                try {
+                    username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Unable to get JWT Token");
+                } catch (ExpiredJwtException e) {
+                    System.out.println("JWT Token has expired");
+                } catch (SignatureException e) {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "JWT signature does not match locally computed signature.");
+                    return;
+                }
+            } else {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token has been blacklisted.");
                 return;
             }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
         }
-
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 

@@ -4,7 +4,9 @@ import com.madroakos.socially.config.JwtTokenUtil;
 import com.madroakos.socially.dto.JwtRequest;
 import com.madroakos.socially.dto.JwtResponse;
 import com.madroakos.socially.dto.RegistrationRequest;
+import com.madroakos.socially.model.TokenBlacklist;
 import com.madroakos.socially.model.User;
+import com.madroakos.socially.repository.TokenBlacklistRepository;
 import com.madroakos.socially.service.CustomUserDetailsService;
 import com.madroakos.socially.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -31,6 +30,9 @@ public class AuthController {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private TokenBlacklistRepository tokenBlacklistRepository;
 
     @Autowired
     private UserService userService;
@@ -58,6 +60,13 @@ public class AuthController {
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        tokenBlacklistRepository.save(new TokenBlacklist(jwtToken));
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     private void authenticate(String username, String password) throws Exception {
