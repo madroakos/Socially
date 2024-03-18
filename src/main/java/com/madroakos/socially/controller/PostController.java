@@ -1,11 +1,14 @@
 package com.madroakos.socially.controller;
 
+import com.madroakos.socially.dto.PostContent;
 import com.madroakos.socially.model.Post;
 import com.madroakos.socially.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -23,19 +26,7 @@ public class PostController {
     @Autowired
     public PostController(PostRepository postRepository) {
         this.postRepository = postRepository;
-
-        fillWithPostsForTesting();
     }
-
-    private void fillWithPostsForTesting() {
-            postRepository.save(new Post("user", "comment", LocalDateTime.now()));
-            postRepository.save(new Post("béla", "epic", LocalDateTime.now()));
-            postRepository.save(new Post("marci", "emlékezetes nap", LocalDateTime.now()));
-            postRepository.save(new Post("gábor", "zsákbamacska", LocalDateTime.now()));
-            postRepository.save(new Post("ábel", "bolyongásbolyongásbolyongásbolyongásbolyongásbolyongásbolyoasdasdasdasdasdsdsadasasdasdasdasdsadsaddddddddddddddddddddddddddddd", LocalDateTime.now()));
-            postRepository.save(new Post("fruzsi", "pernahajder", LocalDateTime.now()));
-    }
-
     @GetMapping("/posts")
     public List<Map<String, Object>> getPosts() {
         List<Post> temp = postRepository.findAll(sortByTimeDescending);
@@ -83,13 +74,14 @@ public class PostController {
     }
 
     @PostMapping("/submitPost")
-    public ResponseEntity<String> submitPost(@RequestBody Post post) {
-        post.setTimeSubmitted(LocalDateTime.now());
-        if (post.getPostContent() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No content provided");
-        } else {
-        postRepository.save(post);
-        return ResponseEntity.status(HttpStatus.OK).body("Post submitted successfully");
-        }
+    public ResponseEntity<String> submitPost(@RequestBody PostContent postContent) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String authenticatedUsername = userDetails.getUsername();
+        Post currentPost = new Post();
+        currentPost.setUsername(authenticatedUsername);
+        currentPost.setPostContent(postContent.getPostContent());
+        currentPost.setTimeSubmitted(LocalDateTime.now());
+        postRepository.save(currentPost);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Post submitted successfully");
     }
 }
