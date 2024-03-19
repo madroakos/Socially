@@ -12,8 +12,4 @@ public class TokenBlacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
-
-    public TokenBlacklist(String token) {
-        this.token = token;
-    }
 }
