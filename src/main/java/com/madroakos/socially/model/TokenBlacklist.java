@@ -12,4 +12,8 @@ public class TokenBlacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
+
+    public TokenBlacklist(String jwtToken) {
+        this.token = jwtToken;
+    }
 }
