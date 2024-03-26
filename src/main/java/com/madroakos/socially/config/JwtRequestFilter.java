@@ -3,6 +3,7 @@ package com.madroakos.socially.config;
 import com.madroakos.socially.repository.TokenBlacklistRepository;
 import com.madroakos.socially.service.CustomUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.IOException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -50,6 +51,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     System.out.println("JWT Token has expired");
                 } catch (SignatureException e) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "JWT signature does not match locally computed signature.");
+                    return;
+                } catch (MalformedJwtException e) {
+                    System.out.println(requestTokenHeader);
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "JWT Token is malformed.");
                     return;
                 }
             } else {
