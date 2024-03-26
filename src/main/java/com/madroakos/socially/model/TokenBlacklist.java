@@ -3,6 +3,8 @@ package com.madroakos.socially.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -12,6 +14,7 @@ public class TokenBlacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
+    private LocalDateTime expiryDate;
 
     public TokenBlacklist(String jwtToken) {
         this.token = jwtToken;
