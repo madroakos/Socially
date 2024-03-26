@@ -62,6 +62,22 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+    @PostMapping("/validateToken")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+        System.out.println(token);
+        String jwtToken = token.substring(7);
+        if (tokenBlacklistRepository.existsByToken(jwtToken)) {
+            return ResponseEntity.badRequest().body("Token is blacklisted");
+        }
+        if (!jwtTokenUtil.validateToken(jwtToken)) {
+            return ResponseEntity.badRequest().body("Token is invalid or has been tampered with");
+        }
+        if (jwtTokenUtil.isTokenExpired(jwtToken)) {
+            return ResponseEntity.badRequest().body("Token is expired");
+        }
+        return ResponseEntity.ok().body("Token is valid");
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
